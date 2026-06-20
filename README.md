@@ -22,9 +22,3 @@ Aplicación de escritorio para la gestión de pacientes y generación de recetas
 - PostgreSQL 15 o superior
 - Sistema operativo: Windows, Linux o macOS
 
-## Instalación
-
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/tu-usuario/NeuroMedic.git
-cd NeuroMedic

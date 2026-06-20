@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Entorno virtual
+.venv/
+venv/
+ENV/
+env/
+
+# Base de datos
+*.db
+*.sqlite3
+*.sqlite
+
+# Archivos generados
+recetas/*.pdf
+!recetas/.gitkeep
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Variables de entorno
+.env
+*.env
+
+# Archivos del sistema
+Thumbs.db
