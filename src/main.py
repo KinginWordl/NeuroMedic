@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QMessageBox,
     QTableWidget, QTableWidgetItem, QHeaderView,
-    QTextEdit, QGroupBox, QSplitter
+    QTextEdit, QGroupBox, QSplitter, QSizePolicy
 )
 from PyQt6.QtCore import Qt
 from database import verificar_login, get_pacientes, crear_paciente, get_connection
@@ -89,7 +89,8 @@ class MainWindow(QMainWindow):
     def __init__(self, usuario="doctor"):
         super().__init__()
         self.setWindowTitle("🩺 Consultorio Médico")
-        self.setGeometry(100, 100, 1200, 700)
+        self.resize(1200, 700)
+        self.setMinimumSize(800, 500)
 
         # Widget central
         central_widget = QWidget()
@@ -153,13 +154,15 @@ class MainWindow(QMainWindow):
         form_layout.addWidget(QLabel("Diagnóstico:"))
         self.diagnostico_input = QTextEdit()
         self.diagnostico_input.setPlaceholderText("Ingrese el diagnóstico")
-        self.diagnostico_input.setMaximumHeight(80)
+        self.diagnostico_input.setMinimumHeight(80)
+        self.diagnostico_input.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         form_layout.addWidget(self.diagnostico_input)
 
         form_layout.addWidget(QLabel("Tratamiento:"))
         self.tratamiento_input = QTextEdit()
         self.tratamiento_input.setPlaceholderText("Ingrese el tratamiento")
-        self.tratamiento_input.setMaximumHeight(80)
+        self.tratamiento_input.setMinimumHeight(80)
+        self.tratamiento_input.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         form_layout.addWidget(self.tratamiento_input)
 
         # Botones
@@ -181,7 +184,10 @@ class MainWindow(QMainWindow):
         splitter = QSplitter(Qt.Orientation.Horizontal)
         splitter.addWidget(left_panel)
         splitter.addWidget(right_panel)
-        splitter.setSizes([500, 700])
+        splitter.setSizes([480, 720])  # 40% / 60% sobre 1200px
+        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(1, 3)
+        splitter.setChildrenCollapsible(False)
         main_layout.addWidget(splitter)
 
         # Estado
