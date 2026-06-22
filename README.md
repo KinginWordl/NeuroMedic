@@ -9,7 +9,9 @@ Aplicación de escritorio para la gestión de pacientes y generación de recetas
 ## ✨ Características
 
 - 🔐 **Login de usuario** con credenciales almacenadas en PostgreSQL.
-- 📋 **Gestión de pacientes** (registro, consulta y selección desde tabla).
+- 🆕 **Registro de usuarios** desde la pantalla de login (botón "Crear cuenta nueva").
+- 🔍 **Búsqueda en vivo** de pacientes por cédula, nombre o apellido.
+- 📋 **Gestión de pacientes** (registro y edición en ventana modal separada).
 - 📄 **Generación de recetas en PDF** con plantilla HTML profesional (WeasyPrint + Jinja2).
 - 🎨 **Interfaz moderna** con hoja de estilos QSS (azul corporativo, bordes redondeados, filas alternadas).
 - 🗄️ **Persistencia en PostgreSQL** vía `psycopg2`.
@@ -62,7 +64,7 @@ pip install -r requirements.txt
 ### 4. Configurar PostgreSQL
 - Crear la base de datos `demoneuromedic`.
 - Crear las tablas `usuarios` y `pacientes` (ver [`docs/DATABASE.md`](docs/DATABASE.md)).
-- Insertar un usuario inicial (`doctor` / `demo123` por defecto para la demo).
+- Insertar un usuario inicial (`doctor` / `demo123` por defecto para la demo), o bien crearlo desde la pantalla de login con el botón "➕ Crear cuenta nueva".
 
 ### 5. Ajustar credenciales
 Edita `src/database.py` si tu usuario/contraseña de PostgreSQL difieren:
@@ -86,10 +88,12 @@ python src/main.py
 ```
 
 ### Flujo de la aplicación
-1. **Login** — Usuario: `doctor` · Contraseña: `demo123`
-2. **Ventana principal** — Se muestra la lista de pacientes.
-3. **Seleccionar paciente** en la tabla → se cargan sus datos en el formulario.
-4. **Generar Receta** → se crea un PDF en `recetas/receta_{cedula}_{fecha}.pdf` y se abre automáticamente.
+1. **Login** — Usuario: `doctor` · Contraseña: `demo123` (o crea una cuenta nueva desde el botón "➕ Crear cuenta nueva").
+2. **Ventana principal** — Muestra buscador + tabla de pacientes + botones de acción.
+3. **Buscar** pacientes por cédula, nombre o apellido (filtrado en vivo).
+4. **➕ Nuevo Paciente** → abre un modal con el formulario en blanco.
+5. **✏️ Ver / Editar** → selecciona una fila y abre el modal con los datos cargados (también con doble clic sobre la fila).
+6. **📄 Generar Receta** → desde el modal de edición, botón "Generar Receta". Se crea un PDF en `recetas/receta_{cedula}_{fecha}.pdf` y se abre automáticamente.
 
 ---
 
@@ -98,7 +102,7 @@ python src/main.py
 ```
 NeuroMedic/
 ├── src/
-│   ├── main.py            # Ventanas Login + MainWindow (entrypoint)
+│   ├── main.py            # Login + Main + CrearCuentaDialog + PacienteDialog
 │   ├── database.py        # Conexión y consultas a PostgreSQL
 │   ├── pdf_generator.py   # Generación de PDF con WeasyPrint
 │   └── styles.qss         # Hoja de estilos QSS (Ticket #6)
@@ -111,7 +115,7 @@ NeuroMedic/
 │   ├── DATABASE.md
 │   ├── TICKETS.md
 │   └── ideas.md
-├── tests/                    # Tests (pendiente Ticket #8)
+├── tests/                    # Tests (Ticket #8)
 ├── data/                     # Datos auxiliares
 ├── requirements.txt
 ├── .gitignore

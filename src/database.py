@@ -86,6 +86,47 @@ def verificar_login(usuario, contrasena):
         print(f"Error al verificar login: {e}")
         return False
 
+
+# ============================================================
+# FUNCIÓN: Crear nuevo usuario
+# ============================================================
+def usuario_existe(usuario):
+    """Devuelve True si ya existe un usuario con ese nombre."""
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT 1 FROM usuarios WHERE usuario = %s",
+                    (usuario,)
+                )
+                return cur.fetchone() is not None
+    except Exception as e:
+        print(f"Error al verificar usuario: {e}")
+        return False
+
+
+def crear_usuario(usuario, contrasena):
+    """
+    Crea un nuevo usuario en la tabla `usuarios`.
+    Devuelve el id creado, o None si el usuario ya existe / hubo error.
+    """
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "INSERT INTO usuarios (usuario, contrasena) VALUES (%s, %s) RETURNING id",
+                    (usuario, contrasena)
+                )
+                result = cur.fetchone()
+                conn.commit()
+                return result[0] if result else None
+    except psycopg2.errors.UniqueViolation:
+        print(f"Error: el usuario '{usuario}' ya existe.")
+        return None
+    except Exception as e:
+        print(f"Error al crear usuario: {e}")
+        return None
+
 # ============================================================
 # PRUEBA RÁPIDA (ejecutar solo si se corre este archivo directamente)
 # ============================================================

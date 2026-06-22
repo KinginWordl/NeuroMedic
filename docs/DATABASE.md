@@ -92,6 +92,18 @@ WHERE usuario = %s AND contrasena = %s;
 ```
 *Usado en:* `verificar_login()` — `src/database.py:74`
 
+### Verificar si un usuario existe
+```sql
+SELECT 1 FROM usuarios WHERE usuario = %s;
+```
+*Usado en:* `usuario_existe()` — `src/database.py` (previene duplicados al registrar).
+
+### Crear un usuario nuevo
+```sql
+INSERT INTO usuarios (usuario, contrasena) VALUES (%s, %s) RETURNING id;
+```
+*Usado en:* `crear_usuario()` — `src/database.py`. Captura `UniqueViolation` si el usuario ya existe.
+
 ### Listar pacientes
 ```sql
 SELECT * FROM pacientes ORDER BY id DESC;

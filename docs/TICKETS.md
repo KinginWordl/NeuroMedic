@@ -20,6 +20,15 @@ Historial y resumen de cada ticket del proyecto NeuroMedic.
 
 **Progreso:** 7/9 tickets (78%)
 
+> 📌 **Nota:** Tras completar el ticket #7 se realizó un refactor de UX antes de la presentación final.
+> Cambios fuera de tickets formales:
+> - Refactor de `MainWindow`: separador entre la lista de pacientes y los formularios. Ahora la ventana principal solo muestra buscador + tabla + 3 botones (`+ Nuevo`, `✏️ Ver/Editar`, `📄 Generar Receta`).
+> - `PacienteDialog` (nuevo): modal con el formulario completo del paciente, abre desde cualquier acción de la lista.
+> - `CrearCuentaDialog` (nuevo): modal para registrar usuarios nuevos desde la pantalla de login.
+> - Búsqueda en vivo por cédula, nombre o apellido.
+> - Atajos: `Ctrl+S` para guardar en el diálogo de paciente, doble clic en la fila abre el paciente.
+> Detalles en `docs/ARCHITECTURE.md`.
+
 ---
 
 ## Ticket #1 — Inicializar Proyecto y Configurar Entorno

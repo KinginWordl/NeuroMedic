@@ -11,7 +11,8 @@ NeuroMedic sigue una arquitectura simple en capas, sin framework web:
 ```
 ┌────────────────────────────────────────┐
 │          Capa de Presentación          │
-│  PyQt6 (LoginWindow, MainWindow)       │
+│  PyQt6 (LoginWindow, MainWindow,       │
+│  CrearCuentaDialog, PacienteDialog)    │
 │  Estilos QSS (styles.qss)              │
 └────────────────┬───────────────────────┘
                  │
@@ -34,17 +35,20 @@ NeuroMedic sigue una arquitectura simple en capas, sin framework web:
 ### `src/main.py` — Entry point y UI
 - **Entry point:** `if __name__ == '__main__':`
 - **Carga estilos** desde `src/styles.qss` y los aplica con `app.setStyleSheet()` **antes** de mostrar la ventana.
-- **Clases:**
-  - `LoginWindow(QWidget)` — Formulario de autenticación.
-  - `MainWindow(QMainWindow)` — Ventana principal con tabla de pacientes y formulario.
-- **Conexiones clave:**
-  - `self.receta_btn.clicked.connect(self.generar_receta)` → Ticket #7
-  - `self.table.clicked.connect(self.on_paciente_seleccionado)` → carga datos del paciente seleccionado
+- **Clases (4):**
+  - `LoginWindow(QWidget)` — Formulario de autenticación + botón "Crear cuenta".
+  - `CrearCuentaDialog(QDialog)` — Modal para registrar un usuario nuevo.
+  - `MainWindow(QMainWindow)` — Buscador + tabla de pacientes + botones de acción.
+  - `PacienteDialog(QDialog)` — Modal con el formulario completo del paciente (modo `nuevo` o `editar`).
+- **Atajos de teclado:** `Ctrl+S` en `PacienteDialog` guarda.
+- **Doble clic** en una fila de la tabla abre el paciente en modo edición.
 
 ### `src/database.py` — Persistencia
 Funciones públicas:
 - `get_connection()` → contexto de conexión.
 - `verificar_login(usuario, contraseña)` → valida credenciales.
+- `crear_usuario(usuario, contraseña)` → registra un usuario nuevo.
+- `usuario_existe(usuario)` → previene duplicados.
 - `get_pacientes()` → lista todos los pacientes.
 - `crear_paciente(data)` → inserta un paciente.
 
@@ -64,8 +68,11 @@ Hoja de estilos con paleta profesional (azul corporativo, gris neutro, blanco + 
 - Botones (con hover, pressed, disabled y variantes `#accent`, `#danger`).
 - Campos de texto (con focus visible y padding compensado).
 - Tabla (filas alternadas vía `setAlternatingRowColors(True)`).
-- Menús, scrollbars, status bar, splitters, group boxes.
-- Override `#loginWindow` con inputs más grandes.
+- Menús, scrollbars, status bar, splitters, group boxes, separadores (QFrame HLine/VLine).
+- Overrides por `objectName`:
+  - `#loginWindow` — inputs grandes.
+  - `#crearCuentaDialog` — estilo coherente con login.
+  - `#pacienteDialog` — títulos azules, text-areas con focus.
 
 ### `templates/receta_template.html` — Plantilla PDF
 HTML estático con CSS embebido. Variables Jinja2:
@@ -86,34 +93,43 @@ LoginWindow.login()
         └─► error  → QMessageBox.warning
 ```
 
-### Flujo de Carga de Pacientes
+### Flujo de Crear Cuenta
+```
+LoginWindow.abrir_crear_cuenta()
+  └─► CrearCuentaDialog.exec()
+        ├─► Validar: usuario/contraseña no vacíos, contraseña ≥ 4 chars, confirmación coincide
+        ├─► usuario_existe(usuario)           [database.py]
+        ├─► crear_usuario(usuario, contraseña) [database.py]
+        └─► accept()  → vuelve al login
+```
+
+### Flujo de la Ventana Principal
 ```
 MainWindow.__init__()
   └─► cargar_pacientes()
-        └─► get_pacientes()                  [database.py]
-              └─► QTableWidget.setItem(...)  por cada fila
-```
+        └─► get_pacientes()                   [database.py]
+        └─► _aplicar_filtro("")               [pinta todas las filas]
 
-### Flujo de Selección
-```
-table.clicked
-  └─► on_paciente_seleccionado()
-        └─► SELECT diagnostico, tratamiento WHERE id = ?
-        └─► Rellena formulario con datos
-```
+buscar_input.textChanged
+  └─► buscar_pacientes(texto)
+        └─► _aplicar_filtro(texto)
+              └─► Filtra por cédula / nombre / apellido (en memoria)
 
-### Flujo de Generación de Receta (Ticket #7)
-```
+table.doubleClicked / editar_btn.clicked
+  └─► abrir_editar()
+        └─► PacienteDialog(modo="editar", paciente_id)
+              ├─► Cargar datos desde BD
+              ├─► guardar() → UPDATE pacientes WHERE id
+              └─► generar_receta() → generar_receta_pdf() [pdf_generator.py]
+
+nuevo_btn.clicked
+  └─► abrir_nuevo()
+        └─► PacienteDialog(modo="nuevo")
+              └─► guardar() → crear_paciente() [database.py]
+
 receta_btn.clicked
-  └─► generar_receta()
-        ├─► Valida que haya paciente seleccionado
-        ├─► SELECT * FROM pacientes WHERE id = ?
-        ├─► generar_receta_pdf(dict(paciente))   [pdf_generator.py]
-        │     ├─► Carga templates/receta_template.html
-        │     ├─► Template(html).render(...)
-        │     ├─► HTML(string=...).write_pdf(ruta)
-        │     └─► abrir_archivo(ruta)            [multiplataforma]
-        └─► QMessageBox.information("Éxito", ruta)
+  └─► abrir_generar_receta()
+        └─► PacienteDialog(modo="editar")     [el botón "Generar Receta" está dentro del diálogo]
 ```
 
 ---
@@ -122,15 +138,19 @@ receta_btn.clicked
 
 - **Sin frameworks pesados:** se eligió mantener dependencias mínimas (sin Django, Flask, SQLAlchemy) para que la demo sea fácil de ejecutar.
 - **Diccionarios como DTOs:** los cursores devuelven `RealDictCursor`, lo que permite pasar directamente los datos a Jinja2 sin transformaciones.
+- **Búsqueda en memoria:** la lista de pacientes se carga una vez y el filtrado se hace en cliente. Para una BD grande se migraría a `WHERE cedula ILIKE %s OR nombre ILIKE %s`.
+- **Modales para edición:** `PacienteDialog` y `CrearCuentaDialog` aíslan tareas complejas fuera de la ventana principal, manteniéndola limpia.
 - **Estilos centralizados:** todo el QSS vive en un solo archivo para facilitar ajustes visuales.
 - **Multiplataforma explícito:** `pdf_generator.py` detecta el SO y elige el comando de apertura correcto (`startfile`, `open`, `xdg-open`).
 - **Rutas absolutas:** `pdf_generator.py` calcula `BASE_DIR` con `os.path.dirname(os.path.dirname(__file__))` para que funcione sin importar desde dónde se ejecute el script.
+- **Atajos de teclado:** `Ctrl+S` en `PacienteDialog` para guardar sin usar el ratón.
 
 ---
 
 ## 🔮 Mejoras Futuras
 
-- Separar la UI en módulos (login, main, dialogs) si crece.
-- Mover la configuración a un archivo `.env` y leerlo con `python-dotenv`.
-- Añadir tests unitarios (Ticket #8): pytest + pytest-qt.
-- Empaquetar la aplicación con PyInstaller para distribuirla.
+- Persistir contraseñas con `bcrypt` o `argon2`.
+- Migrar la búsqueda a SQL con `ILIKE` cuando la tabla crezca.
+- Añadir paginación a la tabla.
+- Empaquetar la aplicación con PyInstaller.
+- Añadir un historial de recetas generadas por paciente.

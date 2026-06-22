@@ -1,36 +1,36 @@
 /* ============================================================
    NEUROMEDIC - Hoja de estilos QSS (Ticket #6)
-   Paleta profesional: azul corporativo, gris neutro, blanco
+   Paleta profesional: navy médico, gris neutro, blanco
    ============================================================ */
 
 /* ---------- Tokens de paleta (referencia) ---------- */
 /*
-   Azul primario:   #1976D2
-   Azul hover:      #1565C0
-   Azul pressed:    #0D47A1
-   Acento:          #26A69A  (verde-azulado médico)
-   Peligro:         #D32F2F
-   Texto principal: #24292f
-   Texto secundario:#57606a
-   Fondo app:       #f5f7fa
+   Azul primario:   #0D5B85   (navy médico)
+   Azul hover:      #094870
+   Azul pressed:    #063A5C
+   Acento:          #2A7F62   (verde médico sobrio)
+   Peligro:         #B3261E
+   Texto principal: #1F2328
+   Texto secundario:#59636E
+   Fondo app:       #F4F6F8
    Fondo tarjeta:   #ffffff
-   Borde suave:     #d0d7de
-   Fila alterna:    #f6f8fa
-   Seleccion:       #cfe2ff
+   Borde suave:     #D0D7DE
+   Fila alterna:    #F6F8FA
+   Seleccion:       #D7E5F0
 */
 
 /* ============================================================
    BASE GLOBAL
    ============================================================ */
 QWidget {
-    background-color: #f5f7fa;
-    color: #24292f;
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 10pt;
+    background-color: #F4F6F8;
+    color: #1F2328;
+    font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 11pt;
 }
 
 QMainWindow {
-    background-color: #f5f7fa;
+    background-color: #F4F6F8;
 }
 
 QDialog {
@@ -41,51 +41,52 @@ QDialog {
    BOTONES
    ============================================================ */
 QPushButton {
-    background-color: #1976D2;
+    background-color: #0D5B85;
     color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 10px 20px;
     font-weight: 600;
-    font-size: 10pt;
-    min-height: 18px;
+    font-size: 11pt;
+    min-height: 20px;
+    letter-spacing: 0.2px;
 }
 
 QPushButton:hover {
-    background-color: #1565C0;
+    background-color: #094870;
 }
 
 QPushButton:pressed {
-    background-color: #0D47A1;
-    padding-top: 11px;       /* micro "hundido" al presionar */
+    background-color: #063A5C;
+    padding-top: 11px;
     padding-bottom: 9px;
 }
 
 QPushButton:disabled {
-    background-color: #b0bec5;
-    color: #eceff1;
+    background-color: #B0B9C1;
+    color: #ECEEF1;
 }
 
 /* Botón de acento (Generar Receta) */
 QPushButton#accent {
-    background-color: #26A69A;
+    background-color: #2A7F62;
 }
 QPushButton#accent:hover {
-    background-color: #00897B;
+    background-color: #226851;
 }
 QPushButton#accent:pressed {
-    background-color: #00695C;
+    background-color: #1A523E;
 }
 
 /* Botón de peligro (Salir / Eliminar) */
 QPushButton#danger {
-    background-color: #D32F2F;
+    background-color: #B3261E;
 }
 QPushButton#danger:hover {
-    background-color: #C62828;
+    background-color: #96201A;
 }
 QPushButton#danger:pressed {
-    background-color: #B71C1C;
+    background-color: #7A1A15;
 }
 
 /* ============================================================
@@ -93,21 +94,21 @@ QPushButton#danger:pressed {
    ============================================================ */
 QLineEdit, QTextEdit, QPlainTextEdit {
     background-color: #ffffff;
-    border: 1px solid #d0d7de;
+    border: 1px solid #D0D7DE;
     border-radius: 6px;
     padding: 8px 12px;
-    color: #24292f;
-    selection-background-color: #cfe2ff;
-    selection-color: #24292f;
+    color: #1F2328;
+    selection-background-color: #D7E5F0;
+    selection-color: #1F2328;
 }
 
 QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover {
-    border-color: #b1bac4;
+    border-color: #A8B2BC;
 }
 
 QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
-    border: 2px solid #1976D2;
-    background-color: #fafbfc;
+    border: 2px solid #0D5B85;
+    background-color: #FAFBFC;
     /* Compensar el borde para que el texto no salte al enfocar */
     padding: 7px 11px;
 }
@@ -117,8 +118,8 @@ QLineEdit[echoMode="2"] {
 }
 
 QLineEdit:disabled, QTextEdit:disabled {
-    background-color: #f1f3f5;
-    color: #8c959f;
+    background-color: #F1F3F5;
+    color: #8C939A;
 }
 
 /* ============================================================
@@ -126,12 +127,12 @@ QLineEdit:disabled, QTextEdit:disabled {
    ============================================================ */
 QTableWidget {
     background-color: #ffffff;
-    alternate-background-color: #f6f8fa;   /* filas alternadas */
-    border: 1px solid #d0d7de;
-    border-radius: 8px;
-    gridline-color: #e1e4e8;
-    selection-background-color: #cfe2ff;
-    selection-color: #24292f;
+    alternate-background-color: #F6F8FA;
+    border: 1px solid #D0D7DE;
+    border-radius: 6px;
+    gridline-color: #E1E4E8;
+    selection-background-color: #D7E5F0;
+    selection-color: #1F2328;
     outline: 0;
 }
 
@@ -141,8 +142,8 @@ QTableWidget::item {
 }
 
 QTableWidget::item:selected {
-    background-color: #cfe2ff;
-    color: #24292f;
+    background-color: #D7E5F0;
+    color: #1F2328;
 }
 
 QHeaderView {
@@ -150,13 +151,16 @@ QHeaderView {
 }
 
 QHeaderView::section {
-    background-color: #f1f3f5;
-    color: #24292f;
+    background-color: #EEF1F4;
+    color: #1F2328;
     padding: 10px 12px;
     border: none;
-    border-bottom: 1px solid #d0d7de;
-    border-right: 1px solid #e1e4e8;
+    border-bottom: 2px solid #0D5B85;
+    border-right: 1px solid #E1E4E8;
     font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10pt;
+    letter-spacing: 0.5px;
 }
 
 QHeaderView::section:last {
@@ -164,9 +168,9 @@ QHeaderView::section:last {
 }
 
 QTableCornerButton::section {
-    background-color: #f1f3f5;
+    background-color: #EEF1F4;
     border: none;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 2px solid #0D5B85;
 }
 
 /* ============================================================
@@ -174,8 +178,8 @@ QTableCornerButton::section {
    ============================================================ */
 QGroupBox {
     background-color: #ffffff;
-    border: 1px solid #d0d7de;
-    border-radius: 10px;
+    border: 1px solid #D0D7DE;
+    border-radius: 8px;
     margin-top: 14px;
     padding: 16px 12px 12px 12px;
     font-weight: 600;
@@ -186,7 +190,7 @@ QGroupBox::title {
     subcontrol-position: top left;
     left: 15px;
     padding: 0 8px;
-    color: #1976D2;
+    color: #0D5B85;
     background-color: #ffffff;
 }
 
@@ -194,20 +198,21 @@ QGroupBox::title {
    LABELS
    ============================================================ */
 QLabel {
-    color: #24292f;
+    color: #1F2328;
     background-color: transparent;
 }
 
 QLabel#titulo {
     font-size: 22px;
     font-weight: 700;
-    color: #1976D2;
+    color: #0D5B85;
     margin: 8px 0 4px 0;
+    letter-spacing: 0.3px;
 }
 
 QLabel#subtitulo {
     font-size: 13px;
-    color: #57606a;
+    color: #59636E;
     margin-bottom: 8px;
 }
 
@@ -219,7 +224,7 @@ QSplitter {
 }
 
 QSplitter::handle {
-    background-color: #d0d7de;
+    background-color: #D0D7DE;
 }
 
 QSplitter::handle:horizontal {
@@ -231,7 +236,7 @@ QSplitter::handle:vertical {
 }
 
 QSplitter::handle:hover {
-    background-color: #1976D2;
+    background-color: #0D5B85;
 }
 
 /* ============================================================
@@ -242,7 +247,7 @@ QMessageBox {
 }
 
 QMessageBox QLabel {
-    color: #24292f;
+    color: #1F2328;
 }
 
 QMessageBox QPushButton {
@@ -254,36 +259,36 @@ QMessageBox QPushButton {
    SCROLLBARS
    ============================================================ */
 QScrollBar:vertical {
-    background-color: #f1f3f5;
+    background-color: #F1F3F5;
     width: 12px;
     border-radius: 6px;
     margin: 0;
 }
 QScrollBar::handle:vertical {
-    background-color: #d0d7de;
+    background-color: #C8CED4;
     border-radius: 6px;
     min-height: 30px;
 }
 QScrollBar::handle:vertical:hover {
-    background-color: #1976D2;
+    background-color: #0D5B85;
 }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0;
 }
 
 QScrollBar:horizontal {
-    background-color: #f1f3f5;
+    background-color: #F1F3F5;
     height: 12px;
     border-radius: 6px;
     margin: 0;
 }
 QScrollBar::handle:horizontal {
-    background-color: #d0d7de;
+    background-color: #C8CED4;
     border-radius: 6px;
     min-width: 30px;
 }
 QScrollBar::handle:horizontal:hover {
-    background-color: #1976D2;
+    background-color: #0D5B85;
 }
 QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
     width: 0;
@@ -294,7 +299,7 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
    ============================================================ */
 QMenuBar {
     background-color: #ffffff;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid #D0D7DE;
     padding: 2px 4px;
 }
 
@@ -305,13 +310,13 @@ QMenuBar::item {
 }
 
 QMenuBar::item:selected {
-    background-color: #e3f2fd;
-    color: #0D47A1;
+    background-color: #E3EEF6;
+    color: #063A5C;
 }
 
 QMenu {
     background-color: #ffffff;
-    border: 1px solid #d0d7de;
+    border: 1px solid #D0D7DE;
     border-radius: 6px;
     padding: 4px;
 }
@@ -322,7 +327,7 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    background-color: #1976D2;
+    background-color: #0D5B85;
     color: #ffffff;
 }
 
@@ -331,8 +336,8 @@ QMenu::item:selected {
    ============================================================ */
 QStatusBar {
     background-color: #ffffff;
-    border-top: 1px solid #d0d7de;
-    color: #57606a;
+    border-top: 1px solid #D0D7DE;
+    color: #59636E;
 }
 
 QStatusBar::item {
@@ -347,37 +352,105 @@ QStatusBar::item {
 }
 
 #loginWindow QLabel#titulo {
-    color: #1976D2;
-    font-size: 20px;
+    color: #0D5B85;
+    font-size: 22px;
     font-weight: 700;
+    letter-spacing: 0.3px;
 }
 
 #loginWindow QLineEdit {
-    background-color: #f8f9fa;
-    border: 2px solid #d0d7de;
+    background-color: #F8F9FA;
+    border: 1px solid #D0D7DE;
     padding: 12px 16px;
     font-size: 11pt;
 }
 
 #loginWindow QLineEdit:focus {
-    border-color: #1976D2;
+    border: 2px solid #0D5B85;
     background-color: #ffffff;
+    padding: 11px 15px;
 }
 
 #loginWindow QPushButton {
-    background-color: #1976D2;
+    background-color: #0D5B85;
     color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 12px 24px;
     font-size: 11pt;
     font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 #loginWindow QPushButton:hover {
-    background-color: #1565C0;
+    background-color: #094870;
 }
 
 #loginWindow QPushButton:pressed {
-    background-color: #0D47A1;
+    background-color: #063A5C;
+}
+
+/* ============================================================
+   DIÁLOGO: Crear cuenta
+   ============================================================ */
+#crearCuentaDialog {
+    background-color: #ffffff;
+}
+
+#crearCuentaDialog QLabel#titulo {
+    color: #0D5B85;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+#crearCuentaDialog QLineEdit {
+    background-color: #F8F9FA;
+    border: 1px solid #D0D7DE;
+    padding: 10px 14px;
+    font-size: 11pt;
+}
+
+#crearCuentaDialog QLineEdit:focus {
+    border: 2px solid #0D5B85;
+    background-color: #ffffff;
+    padding: 9px 13px;
+}
+
+/* ============================================================
+   DIÁLOGO: Paciente (Nuevo / Editar)
+   ============================================================ */
+#pacienteDialog {
+    background-color: #ffffff;
+}
+
+#pacienteDialog QLabel#titulo {
+    color: #0D5B85;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+#pacienteDialog QTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #D0D7DE;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+#pacienteDialog QTextEdit:focus {
+    border: 2px solid #0D5B85;
+    background-color: #FAFBFC;
+    padding: 7px 11px;
+}
+
+/* ============================================================
+   SEPARADORES (QFrame HLine/VLine)
+   ============================================================ */
+QFrame[frameShape="4"],   /* HLine */
+QFrame[frameShape="5"] {  /* VLine */
+    color: #D0D7DE;
+    background-color: #D0D7DE;
 }
