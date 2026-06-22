@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Receta Médica</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #2C3E50;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #1976D2;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #1976D2;
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 2px;
+        }
+        .header p {
+            color: #7F8C8D;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .datos {
+            background: #F8F9FA;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #1976D2;
+        }
+        .datos h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .datos p {
+            margin: 5px 0;
+        }
+        .receta {
+            margin-bottom: 30px;
+        }
+        .receta h3 {
+            color: #1976D2;
+            border-bottom: 2px solid #ECF0F1;
+            padding-bottom: 5px;
+        }
+        .receta p {
+            background: #FFFFFF;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ECF0F1;
+            min-height: 60px;
+        }
+        .firma {
+            margin-top: 50px;
+            text-align: center;
+            border-top: 1px solid #BDC3C7;
+            padding-top: 20px;
+        }
+        .firma p {
+            margin: 5px 0;
+        }
+        .firma .nombre {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .firma .registro {
+            color: #7F8C8D;
+            font-size: 12px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #95A5A6;
+            font-size: 11px;
+            border-top: 1px solid #ECF0F1;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 CONSULTORIO DR. DÍAZ</h1>
+        <p>Medicina General | Consultas Particulares</p>
+        <p>📞 300-123-4567 | ✉️ drdiaz@consultorio.com</p>
+    </div>
+
+    <div class="datos">
+        <h3>📋 DATOS DEL PACIENTE</h3>
+        <p><strong>Nombre:</strong> {{ nombre }} {{ apellido }}</p>
+        <p><strong>Cédula:</strong> {{ cedula }}</p>
+        <p><strong>Teléfono:</strong> {{ telefono }}</p>
+        <p><strong>Fecha:</strong> {{ fecha }}</p>
+    </div>
+
+    <div class="receta">
+        <h3>🩺 DIAGNÓSTICO</h3>
+        <p>{{ diagnostico }}</p>
+
+        <h3>💊 TRATAMIENTO</h3>
+        <p>{{ tratamiento }}</p>
+    </div>
+
+    <div class="firma">
+        <p class="nombre">Dr. Luis Díaz</p>
+        <p>Médico General</p>
+        <p class="registro">Registro Médico: RM-12345</p>
+        <p>_________________________</p>
+        <p style="font-size: 12px; color: #7F8C8D;">Firma y sello del médico</p>
+    </div>
+
+    <div class="footer">
+        <p>Documento generado automáticamente - {{ fecha }}</p>
+        <p>Validez: 30 días</p>
+    </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from database import verificar_login, get_pacientes, crear_paciente, get_connection
+from pdf_generator import generar_receta_pdf
 from psycopg2 import extras
 
 
@@ -15,6 +16,7 @@ class LoginWindow(QWidget):
         super().__init__()
         self.setWindowTitle("🩺 Consultorio Médico - Login")
         self.setFixedSize(400, 300)
+        self.setObjectName("loginWindow")  # habilita los estilos #loginWindow del QSS
 
         # Centrar ventana en la pantalla
         self.center_window()
@@ -119,6 +121,7 @@ class MainWindow(QMainWindow):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
+        self.table.setAlternatingRowColors(True)  # Ticket #6: colores alternados en la tabla
         self.table.clicked.connect(self.on_paciente_seleccionado)
         left_layout.addWidget(self.table)
 
@@ -172,6 +175,7 @@ class MainWindow(QMainWindow):
         btn_layout.addWidget(self.guardar_btn)
 
         self.receta_btn = QPushButton("📄 Generar Receta")
+        self.receta_btn.setObjectName("accent")  # estilo verde-azulado médico del QSS
         self.receta_btn.clicked.connect(self.generar_receta)
         btn_layout.addWidget(self.receta_btn)
 
@@ -293,37 +297,63 @@ class MainWindow(QMainWindow):
         self.paciente_actual_id = None
 
     def generar_receta(self):
-        """Genera la receta en PDF (Ticket #7)"""
+        """Genera la receta médica en PDF (Ticket #7)."""
         if self.paciente_actual_id is None:
             QMessageBox.warning(self, "Sin selección", "Por favor, seleccione un paciente primero.")
             return
 
-        QMessageBox.information(self, "Próximamente", "📄 La generación de recetas estará disponible en el Ticket #7.")
+        try:
+            with get_connection() as conn:
+                with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
+                    cur.execute(
+                        "SELECT * FROM pacientes WHERE id = %s",
+                        (self.paciente_actual_id,)
+                    )
+                    paciente = cur.fetchone()
 
+            if not paciente:
+                QMessageBox.warning(self, "Error", "Paciente no encontrado.")
+                return
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = LoginWindow()
-    window.show()
-    sys.exit(app.exec())
+            # Generar PDF
+            ruta_pdf = generar_receta_pdf(dict(paciente))
+
+            if ruta_pdf:
+                QMessageBox.information(
+                    self,
+                    "Éxito",
+                    f"✅ Receta generada correctamente\n\n📁 {ruta_pdf}"
+                )
+            else:
+                QMessageBox.critical(
+                    self,
+                    "Error",
+                    "❌ Error al generar la receta. Verifique la carpeta 'templates/'."
+                )
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"❌ {e}")
+
 
 # Cargar estilos QSS
 def cargar_estilos():
+    """Carga los estilos QSS desde src/styles.qss"""
+    import os
+    ruta_qss = os.path.join(os.path.dirname(__file__), 'styles.qss')
     try:
-        with open('src/styles.qss', 'r') as f:
+        with open(ruta_qss, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
-        print("⚠️ Archivo styles.qss no encontrado")
+        print(f"⚠️ Archivo styles.qss no encontrado en {ruta_qss}")
         return ""
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    
-    # Aplicar estilos
+
+    # Aplicar estilos QSS (Ticket #6)
     estilo = cargar_estilos()
     if estilo:
         app.setStyleSheet(estilo)
-    
+
     window = LoginWindow()
     window.show()
     sys.exit(app.exec())

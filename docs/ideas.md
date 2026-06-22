@@ -13,6 +13,12 @@
 
 **Tecnologías:** Python + PyQt6 + PostgreSQL + WeasyPrint + Jinja2
 
+## 📚 Documentación Extendida
+- [`README.md`](../README.md) — Instalación, uso y troubleshooting.
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — Arquitectura, módulos y flujos.
+- [`DATABASE.md`](DATABASE.md) — Esquema de la base de datos.
+- [`TICKETS.md`](TICKETS.md) — Estado y resumen de cada ticket.
+
 ## 🎯 Estado de Tickets
 
 | # | Ticket | Estado | Día |
@@ -23,6 +29,6 @@
 | #4 | Implementar Ventana de Login | ✅ Completado | Día 2 |
 | #5 | Diseñar Ventana Principal | ✅ Completado | Día 2 |
 | #6 | Aplicar Estilos QSS Modernos | ✅ Completado | Día 2 |
-| #7 | Implementar Generador de Recetas en PDF | ⏳ Pendiente | Día 3 |
+| #7 | Implementar Generador de Recetas en PDF | ✅ Completado | Día 2 |
 | #8 | Pruebas de Integración y Validación | ⏳ Pendiente | Día 3 |
 | #9 | Preparar Demo para Presentación | ⏳ Pendiente | Día 3 |
