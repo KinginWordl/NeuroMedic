@@ -12,9 +12,9 @@ from PyQt6.QtGui import QShortcut, QKeySequence
 from database import (
     verificar_login, get_pacientes, crear_paciente, get_connection,
     crear_usuario, usuario_existe,
+    actualizar_paciente, get_paciente_by_id,
 )
 from pdf_generator import generar_receta_pdf
-from psycopg2 import extras
 
 
 # ============================================================
@@ -295,10 +295,7 @@ class PacienteDialog(QDialog):
 
     def cargar_datos(self):
         try:
-            with get_connection() as conn:
-                with conn.cursor(cursor_factory=extras.RealDictCursor) as cur:
-                    cur.execute("SELECT * FROM pacientes WHERE id = %s", (self.paciente_id,))
-                    p = cur.fetchone()
+            p = get_paciente_by_id(self.paciente_id)
             if p:
                 self.cedula_input.setText(p['cedula'])
                 self.nombre_input.setText(p['nombre'])
@@ -339,20 +336,11 @@ class PacienteDialog(QDialog):
                 QMessageBox.critical(self, "Error", "Error al guardar. Verifique que la cédula no esté duplicada.")
         else:
             # actualizar paciente existente
-            try:
-                with get_connection() as conn:
-                    with conn.cursor() as cur:
-                        cur.execute("""
-                            UPDATE pacientes
-                            SET cedula=%s, nombre=%s, apellido=%s,
-                                telefono=%s, diagnostico=%s, tratamiento=%s
-                            WHERE id=%s
-                        """, (cedula, nombre, apellido, telefono, diagnostico, tratamiento, self.paciente_id))
-                        conn.commit()
+            if actualizar_paciente(self.paciente_id, data):
                 QMessageBox.information(self, "Éxito", "Paciente actualizado correctamente.")
                 self.accept()
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+            else:
+                QMessageBox.critical(self, "Error", "No se pudo actualizar el paciente.")
 
     def generar_receta(self):
         """Genera la receta en PDF desde los datos del formulario (sin cerrar el diálogo)."""
@@ -549,8 +537,16 @@ class MainWindow(QMainWindow):
 # ESTILOS QSS
 # ============================================================
 def cargar_estilos():
-    """Carga los estilos QSS desde src/styles.qss."""
-    ruta_qss = os.path.join(os.path.dirname(__file__), 'styles.qss')
+    """Carga los estilos QSS desde styles.qss.
+
+    Compatible con ejecutables congelados por PyInstaller (sys._MEIPASS)
+    y con modo desarrollo (junto al main.py).
+    """
+    if getattr(sys, 'frozen', False):
+        base = sys._MEIPASS  # type: ignore[attr-defined]
+    else:
+        base = os.path.dirname(os.path.abspath(__file__))
+    ruta_qss = os.path.join(base, 'styles.qss')
     try:
         with open(ruta_qss, 'r', encoding='utf-8') as f:
             return f.read()

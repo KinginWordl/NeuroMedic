@@ -17,10 +17,16 @@ venv/
 ENV/
 env/
 
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
 # Base de datos
 *.db
 *.sqlite3
 *.sqlite
+data/*.db
 
 # Archivos generados
 recetas/*.pdf

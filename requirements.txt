@@ -1,4 +1,4 @@
 PyQt6
-psycopg2-binary
 weasyprint
 jinja2
+pyinstaller>=6.0

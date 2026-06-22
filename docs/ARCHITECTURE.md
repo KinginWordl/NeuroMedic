@@ -154,3 +154,35 @@ receta_btn.clicked
 - Añadir paginación a la tabla.
 - Empaquetar la aplicación con PyInstaller.
 - Añadir un historial de recetas generadas por paciente.
+
+---
+
+## 📦 Modo Portable (PyInstaller)
+
+La aplicación detecta automáticamente si está corriendo como script o congelada por PyInstaller:
+
+```python
+if getattr(sys, 'frozen', False):
+    # Modo .exe: usar sys._MEIPASS para recursos, sys.executable para BD/recetas
+else:
+    # Modo desarrollo: rutas relativas al código fuente
+```
+
+Esto permite distribuir **un solo archivo `.exe`** que:
+- Crea `neuromedic.db` (SQLite) junto al .exe en la primera ejecución.
+- Genera PDFs en una carpeta `recetas/` también junto al .exe.
+- Carga estilos y plantillas desde el bundle temporal (`sys._MEIPASS`).
+
+### Construir el .exe
+
+```bash
+pyinstaller neuroMedic.spec
+```
+
+El archivo `neuroMedic.spec` incluye:
+- Modo `--onefile` (un solo archivo .exe).
+- Modo `--windowed` (sin consola en Windows).
+- Recursos empaquetados: `styles.qss`, `templates/receta_template.html`.
+- Exclusiones: `tkinter`, `matplotlib`, `numpy`, `pandas` (para reducir tamaño).
+
+> ⚠️ El .exe en Linux tiene ~74 MB. En Windows puede ser ~150 MB porque incluye las DLLs de PyQt6.

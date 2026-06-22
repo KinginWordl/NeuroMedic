@@ -133,6 +133,27 @@ NeuroMedic/
 
 ---
 
+## 📦 Distribución portable (`.exe`)
+
+Para generar un único archivo ejecutable que tu familia/clientes puedan abrir con doble clic:
+
+```bash
+# Instalar PyInstaller
+pip install pyinstaller
+
+# Generar el .exe
+pyinstaller neuroMedic.spec
+```
+
+El ejecutable queda en `dist/NeuroMedic` (Linux/Mac) o `dist/NeuroMedic.exe` (Windows).
+Al ejecutarlo por primera vez, se crean automáticamente:
+- `neuromedic.db` — base de datos SQLite (junto al .exe)
+- `recetas/` — carpeta de PDFs generados
+
+> 📄 Tu familia solo necesita: **el .exe + las DLLs nativas de WeasyPrint si vas a generar PDFs**. Ver `INSTRUCCIONES_PARA_PAPA.md`.
+
+---
+
 ## 🧪 Troubleshooting
 
 ### WeasyPrint no genera el PDF
