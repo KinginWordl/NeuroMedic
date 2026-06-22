@@ -87,11 +87,11 @@ pyinstaller>=6.0
 
 Si quieres que el `.exe` tenga un ícono bonito en lugar del genérico de Python:
 
-1. Crear o conseguir un `icon.ico` de 256x256 px.
-2. Guardarlo en la raíz del proyecto: `NeuroMedic\icon.ico`.
+1. Crear o conseguir un `iconoNM.ico` de 256x256 px.
+2. Guardarlo en la raíz del proyecto: `NeuroMedic\iconoNM.ico`.
 3. Editar `NeuroMedic.spec` y añadir en la sección `EXE(...)`:
    ```python
-   icon='icon.ico',
+   icon='iconoNM.ico',
    ```
 
 Si no tienes ícono, déjalo como está. Funciona igual, sólo se ve el ícono de Python.
