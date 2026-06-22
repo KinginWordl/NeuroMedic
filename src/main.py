@@ -306,3 +306,24 @@ if __name__ == '__main__':
     window = LoginWindow()
     window.show()
     sys.exit(app.exec())
+
+# Cargar estilos QSS
+def cargar_estilos():
+    try:
+        with open('src/styles.qss', 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        print("⚠️ Archivo styles.qss no encontrado")
+        return ""
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    
+    # Aplicar estilos
+    estilo = cargar_estilos()
+    if estilo:
+        app.setStyleSheet(estilo)
+    
+    window = LoginWindow()
+    window.show()
+    sys.exit(app.exec())

@@ -18,11 +18,11 @@
 | # | Ticket | Estado | Día |
 |---|--------|--------|-----|
 | #1 | Inicializar Proyecto y Configurar Entorno | ✅ Completado | Día 1 |
-| #2 | Configurar PostgreSQL y Crear Base de Datos | ⏳ Pendiente | Día 1 |
-| #3 | Crear Módulo de Conexión a Base de Datos | ⏳ Pendiente | Día 1 |
-| #4 | Implementar Ventana de Login | ⏳ Pendiente | Día 2 |
-| #5 | Diseñar Ventana Principal | ⏳ Pendiente | Día 2 |
-| #6 | Aplicar Estilos QSS Modernos | ⏳ Pendiente | Día 2 |
+| #2 | Configurar PostgreSQL y Crear Base de Datos | ✅ Completado | Día 1 |
+| #3 | Crear Módulo de Conexión a Base de Datos | ✅ Completado | Día 1 |
+| #4 | Implementar Ventana de Login | ✅ Completado | Día 2 |
+| #5 | Diseñar Ventana Principal | ✅ Completado | Día 2 |
+| #6 | Aplicar Estilos QSS Modernos | ✅ Completado | Día 2 |
 | #7 | Implementar Generador de Recetas en PDF | ⏳ Pendiente | Día 3 |
 | #8 | Pruebas de Integración y Validación | ⏳ Pendiente | Día 3 |
 | #9 | Preparar Demo para Presentación | ⏳ Pendiente | Día 3 |
