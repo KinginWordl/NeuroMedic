@@ -23,8 +23,8 @@ NeuroMedic sigue una arquitectura simple en capas, sin framework web:
                  │
 ┌────────────────▼───────────────────────┐
 │          Capa de Datos                 │
-│  psycopg2 (database.py)                │
-│  PostgreSQL                            │
+│  sqlite3 (database.py)                 │
+│  SQLite (archivo neuromedic.db)        │
 └────────────────────────────────────────┘
 ```
 
@@ -43,16 +43,15 @@ NeuroMedic sigue una arquitectura simple en capas, sin framework web:
 - **Atajos de teclado:** `Ctrl+S` en `PacienteDialog` guarda.
 - **Doble clic** en una fila de la tabla abre el paciente en modo edición.
 
-### `src/database.py` — Persistencia
-Funciones públicas:
-- `get_connection()` → contexto de conexión.
+### `src/database.py` — Persistencia (SQLite portable)
+- `get_connection()` → abre conexión a `neuromedic.db`, filas como `dict` vía `sqlite3.Row`.
+- `init_db()` → crea tablas `usuarios` y `pacientes` (e índice por cédula) si no existen. Inserta usuario demo `doctor / demo123` la primera vez.
 - `verificar_login(usuario, contraseña)` → valida credenciales.
 - `crear_usuario(usuario, contraseña)` → registra un usuario nuevo.
 - `usuario_existe(usuario)` → previene duplicados.
-- `get_pacientes()` → lista todos los pacientes.
-- `crear_paciente(data)` → inserta un paciente.
-
-Usa `RealDictCursor` para devolver resultados como diccionarios (compatibles con Jinja2).
+- `get_pacientes()` → lista todos los pacientes (orden desc por id).
+- `crear_paciente(data)` / `actualizar_paciente(id, data)` / `get_paciente_by_id(id)` → CRUD de pacientes.
+- La BD se guarda junto al `.exe` (modo portable) o en `data/` (modo desarrollo).
 
 ### `src/pdf_generator.py` — Generación de PDF (Ticket #7)
 - `generar_receta_pdf(paciente_data: dict) -> str | None`
@@ -138,7 +137,7 @@ receta_btn.clicked
 
 - **Sin frameworks pesados:** se eligió mantener dependencias mínimas (sin Django, Flask, SQLAlchemy) para que la demo sea fácil de ejecutar.
 - **Diccionarios como DTOs:** los cursores devuelven `RealDictCursor`, lo que permite pasar directamente los datos a Jinja2 sin transformaciones.
-- **Búsqueda en memoria:** la lista de pacientes se carga una vez y el filtrado se hace en cliente. Para una BD grande se migraría a `WHERE cedula ILIKE %s OR nombre ILIKE %s`.
+- **Búsqueda en memoria:** la lista de pacientes se carga una vez y el filtrado se hace en cliente. Para una BD grande se migraría a `WHERE cedula LIKE ? OR nombre LIKE ?`.
 - **Modales para edición:** `PacienteDialog` y `CrearCuentaDialog` aíslan tareas complejas fuera de la ventana principal, manteniéndola limpia.
 - **Estilos centralizados:** todo el QSS vive en un solo archivo para facilitar ajustes visuales.
 - **Multiplataforma explícito:** `pdf_generator.py` detecta el SO y elige el comando de apertura correcto (`startfile`, `open`, `xdg-open`).
@@ -150,14 +149,14 @@ receta_btn.clicked
 ## 🔮 Mejoras Futuras
 
 - Persistir contraseñas con `bcrypt` o `argon2`.
-- Migrar la búsqueda a SQL con `ILIKE` cuando la tabla crezca.
+- Migrar la búsqueda a SQL con `LIKE` cuando la tabla crezca.
 - Añadir paginación a la tabla.
-- Empaquetar la aplicación con PyInstaller.
+- ~~Empaquetar la aplicación con PyInstaller.~~ ✅ Hecho (ver sección Distribución portable).
 - Añadir un historial de recetas generadas por paciente.
 
 ---
 
-## 📦 Modo Portable (PyInstaller)
+## 📦 Distribución portable (PyInstaller)
 
 La aplicación detecta automáticamente si está corriendo como script o congelada por PyInstaller:
 
@@ -176,13 +175,14 @@ Esto permite distribuir **un solo archivo `.exe`** que:
 ### Construir el .exe
 
 ```bash
-pyinstaller neuroMedic.spec
+pyinstaller NeuroMedic.spec
 ```
 
-El archivo `neuroMedic.spec` incluye:
+El archivo `NeuroMedic.spec` incluye:
 - Modo `--onefile` (un solo archivo .exe).
-- Modo `--windowed` (sin consola en Windows).
+- Modo `--windowed` / `console=False` (sin consola en Windows).
 - Recursos empaquetados: `styles.qss`, `templates/receta_template.html`.
 - Exclusiones: `tkinter`, `matplotlib`, `numpy`, `pandas` (para reducir tamaño).
 
-> ⚠️ El .exe en Linux tiene ~74 MB. En Windows puede ser ~150 MB porque incluye las DLLs de PyQt6.
+> ⚠️ El `.exe` en Linux mide ~74 MB. En Windows suele ser ~150 MB porque incluye las DLLs de PyQt6 y WeasyPrint.
+> 📄 La guía paso a paso para compilar en Windows está en [`BUILD_WINDOWS.md`](../BUILD_WINDOWS.md).
