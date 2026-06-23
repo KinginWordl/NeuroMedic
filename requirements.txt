@@ -1,0 +1,4 @@
+PyQt6
+weasyprint
+jinja2
+pyinstaller>=6.0

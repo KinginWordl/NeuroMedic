@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Receta Médica</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #1F2328;
+            line-height: 1.65;
+            font-size: 11pt;
+            margin: 0;
+        }
+
+        /* ---------- Cabecera ---------- */
+        .header {
+            border-bottom: 3px solid #0D5B85;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            color: #0D5B85;
+            margin: 0 0 4px 0;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header .subtitulo {
+            color: #59636E;
+            margin: 0 0 6px 0;
+            font-size: 11pt;
+            letter-spacing: 0.5px;
+        }
+
+        .header .contacto {
+            color: #59636E;
+            margin: 2px 0;
+            font-size: 10pt;
+        }
+
+        /* ---------- Datos del paciente ---------- */
+        .datos {
+            background: #F4F6F8;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin-bottom: 28px;
+            border-left: 4px solid #0D5B85;
+        }
+
+        .datos h3 {
+            margin: 0 0 8px 0;
+            color: #0D5B85;
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .datos p {
+            margin: 4px 0;
+            font-size: 11pt;
+        }
+
+        .datos strong {
+            color: #1F2328;
+            font-weight: 600;
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        /* ---------- Receta ---------- */
+        .receta {
+            margin-bottom: 32px;
+        }
+
+        .receta h3 {
+            color: #0D5B85;
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 18px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #D0D7DE;
+        }
+
+        .receta p.contenido {
+            background: #FFFFFF;
+            padding: 12px 16px;
+            border-radius: 4px;
+            border: 1px solid #D0D7DE;
+            min-height: 60px;
+            margin: 0;
+            font-size: 11pt;
+            white-space: pre-wrap;
+        }
+
+        /* ---------- Firma ---------- */
+        .firma {
+            margin-top: 60px;
+            text-align: center;
+            padding-top: 16px;
+        }
+
+        .firma .linea {
+            border-top: 1px solid #1F2328;
+            width: 240px;
+            margin: 0 auto 10px auto;
+            padding-top: 6px;
+        }
+
+        .firma .nombre {
+            font-weight: 700;
+            font-size: 12pt;
+            margin: 0;
+            color: #1F2328;
+        }
+
+        .firma .especialidad {
+            margin: 2px 0;
+            color: #59636E;
+            font-size: 10pt;
+        }
+
+        .firma .registro {
+            color: #59636E;
+            font-size: 9pt;
+            margin: 2px 0;
+        }
+
+        /* ---------- Pie de página ---------- */
+        .footer {
+            position: fixed;
+            bottom: 1cm;
+            left: 2cm;
+            right: 2cm;
+            text-align: center;
+            color: #8C939A;
+            font-size: 9pt;
+            border-top: 1px solid #D0D7DE;
+            padding-top: 8px;
+        }
+
+        .footer p {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Consultorio Médico Dr. Díaz</h1>
+        <p class="subtitulo">Medicina General</p>
+        <p class="contacto">Tel: 300-123-4567  |  Correo: consultorio@drdiaz.com</p>
+        <p class="contacto">Consultas particulares</p>
+    </div>
+
+    <div class="datos">
+        <h3>Datos del Paciente</h3>
+        <p><strong>Nombre:</strong> {{ nombre }} {{ apellido }}</p>
+        <p><strong>Cédula:</strong> {{ cedula }}</p>
+        <p><strong>Teléfono:</strong> {{ telefono }}</p>
+        <p><strong>Fecha:</strong> {{ fecha }}</p>
+    </div>
+
+    <div class="receta">
+        <h3>Diagnóstico</h3>
+        <p class="contenido">{{ diagnostico }}</p>
+
+        <h3>Tratamiento</h3>
+        <p class="contenido">{{ tratamiento }}</p>
+    </div>
+
+    <div class="firma">
+        <div class="linea"></div>
+        <p class="nombre">Dr. Luis Díaz</p>
+        <p class="especialidad">Médico General</p>
+        <p class="registro">Registro Médico: RM-12345</p>
+    </div>
+
+    <div class="footer">
+        <p>Documento generado el {{ fecha }}</p>
+        <p>Validez: 30 días</p>
+    </div>
+</body>
+</html>
