@@ -18,7 +18,19 @@ from datetime import datetime
 from jinja2 import Template
 from weasyprint import HTML
 
-
+def setup_dll_paths():
+    """Agrega la carpeta de DLLs al PATH si estamos en un .exe"""
+    if getattr(sys, 'frozen', False):
+        # Estamos en el .exe
+        base_dir = os.path.dirname(sys.executable)
+        dll_dir = os.path.join(base_dir, 'libs')  # Cambiar a '.' si usas --add-binary sin carpeta
+        if os.path.exists(dll_dir):
+            os.environ['PATH'] = dll_dir + os.pathsep + os.environ['PATH']
+        
+        # También configurar WEASYPRINT_DLL_DIRECTORIES
+        if os.path.exists(dll_dir):
+            os.environ['WEASYPRINT_DLL_DIRECTORIES'] = dll_dir
+setup_dll_paths()
 # ============================================================
 # CONFIGURACIÓN DE RUTAS
 # ============================================================

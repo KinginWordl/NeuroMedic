@@ -1,16 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
+
+datas = [('templates', 'templates'), ('src/styles.qss', 'src')]
+binaries = [('libs/libgobject-2.0-0.dll', '.'), ('libs/libglib-2.0-0.dll', '.'), ('libs/libpango-1.0-0.dll', '.'), ('libs/libcairo-2.dll', '.'), ('libs/libharfbuzz-0.dll', '.'), ('libs/libfontconfig-1.dll', '.'), ('libs/libpangoft2-1.0-0.dll', '.')]
+hiddenimports = ['jinja2', 'weasyprint', 'sqlite3']
+tmp_ret = collect_all('PyQt6')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
-    ['src/main.py'],
+    ['src\\main.py'],
     pathex=[],
-    binaries=[],
-    datas=[('src/styles.qss', '.'), ('templates/receta_template.html', 'templates')],
-    hiddenimports=['database', 'pdf_generator'],
+    binaries=binaries,
+    datas=datas,
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['tkinter', 'matplotlib', 'numpy', 'pandas', 'scipy'],
+    excludes=[],
     noarchive=False,
     optimize=0,
 )
@@ -23,7 +30,6 @@ exe = EXE(
     a.datas,
     [],
     name='NeuroMedic',
-    icon='iconoNM.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -36,4 +42,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['iconoNM.ico'],
 )
